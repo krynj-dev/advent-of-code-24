@@ -24,30 +24,23 @@ class DayOne : AoCDay, AoCObservable {
     }
 
     override fun partOne(inputLines: List<String>): BigInteger {
-        // Convert to int list pair
-        val lists: Pair<Queue<Pair<BigInteger, Int>>, Queue<Pair<BigInteger, Int>>> =
-            Pair(
-                PriorityQueue(compareBy<Pair<BigInteger, Int>?> { it?.first }.thenBy { it?.second }),
-                PriorityQueue(compareBy<Pair<BigInteger, Int>?> { it?.first }.thenBy { it?.second })
-            )
-        inputLines.forEachIndexed { index, line ->
-            val lineInts: List<BigInteger> = AoCUtil.readLineAsInt(line, "   ")
+        // Create a set of parallel prio queues for each column in the file (sorted first by value, then by location)
+        val lists: Pair<Queue<BigInteger>, Queue<BigInteger>> = Pair(
+            PriorityQueue(), PriorityQueue()
+        )
+        inputLines.forEach {
+            val lineInts: List<BigInteger> = AoCUtil.readLineAsInt(it, "   ")
             assert(lineInts.size == 2)
             // Add entries
-            lists.first.add(Pair(lineInts[0], index))
-            lists.second.add(Pair(lineInts[1], index))
+            lists.first.add(lineInts[0])
+            lists.second.add(lineInts[1])
         }
-
         var distanceTotal: BigInteger = BigInteger.ZERO
-
         while (lists.first.isNotEmpty() && lists.second.isNotEmpty()) {
-            val a = lists.first.poll()
-            val b = lists.second.poll()
-            val diff = a.first.subtract(b.first).abs()
+            val diff = lists.first.poll().subtract(lists.second.poll()).abs()
             distanceTotal = distanceTotal.add(diff)
             broadcast(diff)
         }
-
         return distanceTotal
     }
 
@@ -82,6 +75,20 @@ class DayOne : AoCDay, AoCObservable {
         }
 
         return distanceTotal
+    }
+
+    fun partOneConcise(inputLines: List<String>): BigInteger {
+        val queues = inputLines.map { AoCUtil.readLineAsInt(it, "   ") }
+            .fold(mutableListOf(PriorityQueue<BigInteger>(), PriorityQueue<BigInteger>())) { acc, bigIntegers ->
+                acc[0].add(bigIntegers[0])
+                acc[1].add(bigIntegers[1])
+                acc
+            }
+        var result = BigInteger.ZERO
+        while (queues.first().isNotEmpty()) {
+            result = result.add(queues[0].poll().minus(queues[1].poll()).abs())
+        }
+        return result
     }
 
     override fun addObserver(observer: AoCObserver) {
