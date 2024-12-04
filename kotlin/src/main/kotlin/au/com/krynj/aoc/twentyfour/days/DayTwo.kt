@@ -39,14 +39,6 @@ class DayTwo : AoCDay, AoCObservable {
         val dp: MutableList<MutableList<Int?>> = mutableListOf()
         report.forEach{ _ -> dp.add(MutableList(4) { null }) }
         for (i in report.indices) {
-            if (i > 0 && (dp[i][1] == null || dp[i-1][2] == null)) {
-                dp[i][1] = report[i] - report[i-1]
-                dp[i-1][2] = report[i-1] - report[i]
-            }
-            if (i > 1 && (dp[i][0] == null || dp[i-2][3] == null)) {
-                dp[i][0] = report[i] - report[i-2]
-                dp[i-2][3] = report[i-2] - report[i]
-            }
             if (i < report.size-1 && (dp[i][2] == null || dp[i+1][1] == null)) {
                 dp[i][2] = report[i+1] - report[i]
                 dp[i+1][1] = report[i] - report[i+1]
