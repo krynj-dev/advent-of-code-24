@@ -3,6 +3,9 @@ package au.com.krynj.aoc.twentyfour.days
 import au.com.krynj.aoc.framework.AoCDay
 import au.com.krynj.aoc.framework.AoCObservable
 import au.com.krynj.aoc.framework.AoCObserver
+import au.com.krynj.aoc.util.AoCConsoleColours
+import au.com.krynj.aoc.util.AoCConsoleColours.CYAN
+import au.com.krynj.aoc.util.AoCConsoleColours.addColour
 import au.com.krynj.aoc.util.AoCUtil
 import java.math.BigInteger
 import java.util.*
@@ -14,8 +17,11 @@ class DayOne : AoCDay, AoCObservable {
     private val observers: MutableList<AoCObserver> = ArrayList()
 
     override fun run() {
-        println("Part 1: " + partOne(AoCUtil.readResourceFile("dayone/input.txt")))
-        println("Part 2: " + partTwo(AoCUtil.readResourceFile("dayone/input.txt")))
+        println(addColour("Day One", CYAN))
+        println("Part 1: " + addColour("%d", AoCConsoleColours.GREEN)
+            .format(partOne(AoCUtil.readResourceFile("dayone/input.txt"))))
+        println("Part 2: " + addColour("%d", AoCConsoleColours.GREEN)
+            .format(partTwo(AoCUtil.readResourceFile("dayone/input.txt"))))
     }
 
     override fun getDay(): Int {

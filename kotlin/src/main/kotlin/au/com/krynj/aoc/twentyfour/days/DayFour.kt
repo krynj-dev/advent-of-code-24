@@ -4,6 +4,9 @@ import au.com.krynj.aoc.framework.AoCDay
 import au.com.krynj.aoc.framework.AoCObservable
 import au.com.krynj.aoc.framework.AoCObserver
 import au.com.krynj.aoc.util.AoCAlgorithmUtil.findAround
+import au.com.krynj.aoc.util.AoCConsoleColours
+import au.com.krynj.aoc.util.AoCConsoleColours.CYAN
+import au.com.krynj.aoc.util.AoCConsoleColours.addColour
 import au.com.krynj.aoc.util.AoCUtil
 import java.math.BigInteger
 import kotlin.math.abs
@@ -65,8 +68,11 @@ class DayFour : AoCDay, AoCObservable {
     }
 
     override fun run() {
-        println("Part 1: " + partOne(AoCUtil.readResourceFile("dayfour/input.txt")))
-        println("Part 2: " + partTwo(AoCUtil.readResourceFile("dayfour/input.txt")))
+        println(addColour("Day Four", CYAN))
+        println("Part 1: " + addColour("%d", AoCConsoleColours.GREEN)
+            .format(partOne(AoCUtil.readResourceFile("dayfour/input.txt"))))
+        println("Part 2: " + addColour("%d", AoCConsoleColours.GREEN)
+            .format(partTwo(AoCUtil.readResourceFile("dayfour/input.txt"))))
     }
 
     override fun addObserver(observer: AoCObserver) {

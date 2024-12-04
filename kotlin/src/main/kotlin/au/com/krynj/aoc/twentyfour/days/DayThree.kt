@@ -3,6 +3,9 @@ package au.com.krynj.aoc.twentyfour.days
 import au.com.krynj.aoc.framework.AoCDay
 import au.com.krynj.aoc.framework.AoCObservable
 import au.com.krynj.aoc.framework.AoCObserver
+import au.com.krynj.aoc.util.AoCConsoleColours
+import au.com.krynj.aoc.util.AoCConsoleColours.CYAN
+import au.com.krynj.aoc.util.AoCConsoleColours.addColour
 import au.com.krynj.aoc.util.AoCUtil
 import java.math.BigInteger
 
@@ -28,13 +31,17 @@ class DayThree: AoCDay, AoCObservable {
 
     override fun partTwo(inputLines: List<String>): BigInteger {
         val combined = inputLines.reduce { acc, s -> acc.plus(s) }
-        val x = """(do[(][)].*?don't[(][)])|(^.*?don't[(][)])|(do[(][)].*?$)""".toRegex().findAll(combined).map { it.value }.toList()
+        val x = """(do[(][)].*?don't[(][)])|(^.*?don't[(][)])|(do[(][)].*?$)""".toRegex().findAll(combined)
+            .map { it.value }.toList()
         return partOne(x)
     }
 
     override fun run() {
-        println("Part 1: " + partOne(AoCUtil.readResourceFile("daythree/input.txt")))
-        println("Part 2: " + partTwo(AoCUtil.readResourceFile("daythree/input.txt")))
+        println(addColour("Day Three", CYAN))
+        println("Part 1: " + addColour("%d", AoCConsoleColours.GREEN)
+            .format(partOne(AoCUtil.readResourceFile("daythree/input.txt"))))
+        println("Part 2: " + addColour("%d", AoCConsoleColours.GREEN)
+            .format(partTwo(AoCUtil.readResourceFile("daythree/input.txt"))))
     }
 
     override fun addObserver(observer: AoCObserver) {

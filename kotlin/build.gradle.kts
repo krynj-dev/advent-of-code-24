@@ -1,6 +1,7 @@
 plugins {
     id("java")
     kotlin("jvm") version "1.9.0"
+    application
 }
 
 group = "au.com.krynj.aoc.util"
@@ -24,4 +25,15 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+application {
+    mainClass.set("au.com.krynj.aoc.twentyfour.Main")
+}
+
+tasks {
+    named<JavaExec>("run") {
+        group = "application"
+        description = "Run the main Kotlin application"
+    }
 }
