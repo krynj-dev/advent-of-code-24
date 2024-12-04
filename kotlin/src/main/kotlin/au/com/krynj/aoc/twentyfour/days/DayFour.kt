@@ -3,11 +3,10 @@ package au.com.krynj.aoc.twentyfour.days
 import au.com.krynj.aoc.framework.AoCDay
 import au.com.krynj.aoc.framework.AoCObservable
 import au.com.krynj.aoc.framework.AoCObserver
+import au.com.krynj.aoc.util.AoCAlgorithmUtil.findAround
 import au.com.krynj.aoc.util.AoCUtil
 import java.math.BigInteger
 import kotlin.math.abs
-import kotlin.math.max
-import kotlin.math.min
 import kotlin.math.sign
 
 class DayFour : AoCDay, AoCObservable {
@@ -23,9 +22,9 @@ class DayFour : AoCDay, AoCObservable {
         inputLines.forEachIndexed { y, str ->
             str.forEachIndexed { x, c ->
                 if (c == 'X') {
-                    val mLocs = findAround(y, x, inputLines, 'M')
+                    val mLocs = findAround(y, x, inputLines, 'M', 1)
                     val aLocs = mLocs.flatMap {
-                        findAround(it.first, it.second, inputLines, 'A')
+                        findAround(it.first, it.second, inputLines, 'A', 1)
                             .filter { that ->
                                 Pair(
                                     (y - it.first).sign,
@@ -34,7 +33,7 @@ class DayFour : AoCDay, AoCObservable {
                             }
                     }
                     val sLocs = aLocs.flatMap {
-                        findAround(it.first, it.second, inputLines, 'S')
+                        findAround(it.first, it.second, inputLines, 'S', 1)
                             .filter { that ->
                                 Pair(
                                     (y - it.first).sign,
@@ -54,8 +53,8 @@ class DayFour : AoCDay, AoCObservable {
         inputLines.forEachIndexed { y, str ->
             str.forEachIndexed { x, c ->
                 if (c == 'A') {
-                    val mLocs = findAround(y, x, inputLines, 'M')
-                    val sLocs = findAround(y, x, inputLines, 'S')
+                    val mLocs = findAround(y, x, inputLines, 'M', 1)
+                    val sLocs = findAround(y, x, inputLines, 'S', 1)
                     val crosses =
                         mLocs.filter { sLocs.any { that -> abs(it.first - that.first) == 2 && abs(it.second - that.second) == 2 } }
                     if (crosses.size == 2) result += 1
@@ -63,16 +62,6 @@ class DayFour : AoCDay, AoCObservable {
             }
         }
         return result.toBigInteger()
-    }
-
-    fun findAround(y: Int, x: Int, puzzle: List<String>, target: Char): List<Pair<Int, Int>> {
-        val locs: MutableList<Pair<Int, Int>> = mutableListOf()
-        for (m in max(0, y - 1)..min(y + 1, puzzle.size - 1)) {
-            for (l in max(0, x - 1)..min(x + 1, puzzle.first().length - 1)) {
-                if (puzzle[m][l] == target) locs.add(Pair(m, l))
-            }
-        }
-        return locs
     }
 
     override fun run() {
