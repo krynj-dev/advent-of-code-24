@@ -7,7 +7,6 @@ import au.com.krynj.aoc.util.AoCUtil
 import java.math.BigInteger
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 import kotlin.collections.LinkedHashMap
 
 class DayOne : AoCDay, AoCObservable {
@@ -15,8 +14,8 @@ class DayOne : AoCDay, AoCObservable {
     private val observers: MutableList<AoCObserver> = ArrayList()
 
     override fun run() {
-        println("Part 1: " + partOne(AoCUtil.readResourceFile("dayone/partone.txt")))
-        println("Part 2: " + partTwo(AoCUtil.readResourceFile("dayone/partone.txt")))
+        println("Part 1: " + partOne(AoCUtil.readResourceFile("dayone/input.txt")))
+        println("Part 2: " + partTwo(AoCUtil.readResourceFile("dayone/input.txt")))
     }
 
     override fun getDay(): Int {

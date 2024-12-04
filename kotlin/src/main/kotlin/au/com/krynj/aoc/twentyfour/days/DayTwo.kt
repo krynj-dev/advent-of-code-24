@@ -14,8 +14,8 @@ class DayTwo : AoCDay, AoCObservable {
     private val observers: MutableList<AoCObserver> = ArrayList()
 
     override fun run() {
-        println("Part 1: " + partOne(AoCUtil.readResourceFile("daytwo/partone.txt")))
-        println("Part 2: " + partTwo(AoCUtil.readResourceFile("daytwo/partone.txt")))
+        println("Part 1: " + partOne(AoCUtil.readResourceFile("daytwo/input.txt")))
+        println("Part 2: " + partTwo(AoCUtil.readResourceFile("daytwo/input.txt")))
     }
 
     override fun getDay(): Int {

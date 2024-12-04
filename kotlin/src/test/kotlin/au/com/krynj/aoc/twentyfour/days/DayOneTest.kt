@@ -41,7 +41,7 @@ class DayOneTest {
     @Test
     fun testPartOneConciseSameResult() {
         val dayOne = DayOne()
-        val partOnePath = "dayone/partone.txt"
+        val partOnePath = "dayone/input.txt"
         // Ensure Same result
         assertEquals(
             dayOne.partOne(AoCUtil.readResourceFile(partOnePath)),
@@ -52,7 +52,7 @@ class DayOneTest {
     @Test
     fun testPartOneTimings() {
         val dayOne = DayOne()
-        val partOnePath = "dayone/partone.txt"
+        val partOnePath = "dayone/input.txt"
         val timesOG = ArrayList<Long>()
         val timesNew = ArrayList<Long>()
         repeat(500) {
