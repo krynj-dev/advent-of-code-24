@@ -29,7 +29,7 @@ class DayOne : AoCDay, AoCObservable {
             PriorityQueue(), PriorityQueue()
         )
         inputLines.forEach {
-            val lineInts: List<BigInteger> = AoCUtil.readLineAsInt(it, "   ")
+            val lineInts: List<BigInteger> = AoCUtil.readLineAsBigInt(it, "   ")
             assert(lineInts.size == 2)
             // Add entries
             lists.first.add(lineInts[0])
@@ -49,7 +49,7 @@ class DayOne : AoCDay, AoCObservable {
         val counts: Pair<MutableMap<BigInteger, BigInteger>, MutableMap<BigInteger, BigInteger>> =
             Pair(LinkedHashMap(), LinkedHashMap())
         inputLines.forEach() { line ->
-            val lineInts: List<BigInteger> = AoCUtil.readLineAsInt(line, "   ")
+            val lineInts: List<BigInteger> = AoCUtil.readLineAsBigInt(line, "   ")
             assert(lineInts.size == 2)
             // Add entries
             val num0 = lineInts[0]
@@ -78,7 +78,7 @@ class DayOne : AoCDay, AoCObservable {
     }
 
     fun partOneConcise(inputLines: List<String>): BigInteger {
-        val queues = inputLines.map { AoCUtil.readLineAsInt(it, "   ") }
+        val queues = inputLines.map { AoCUtil.readLineAsBigInt(it, "   ") }
             .fold(mutableListOf(PriorityQueue<BigInteger>(), PriorityQueue<BigInteger>())) { acc, bigIntegers ->
                 acc[0].add(bigIntegers[0])
                 acc[1].add(bigIntegers[1])
