@@ -3,20 +3,17 @@ package au.com.krynj.aoc.twentyfour.days
 import au.com.krynj.aoc.framework.AoCDay
 import au.com.krynj.aoc.framework.AoCObservable
 import au.com.krynj.aoc.framework.AoCObserver
-import au.com.krynj.aoc.util.AoCConsoleColours
+import au.com.krynj.aoc.framework.SimpleObserverContext
 import au.com.krynj.aoc.util.AoCConsoleColours.CYAN
 import au.com.krynj.aoc.util.AoCConsoleColours.GREEN
-import au.com.krynj.aoc.util.AoCConsoleColours.GREEN_BOLD
-import au.com.krynj.aoc.util.AoCConsoleColours.RED
 import au.com.krynj.aoc.util.AoCConsoleColours.addColour
 import au.com.krynj.aoc.util.AoCUtil
 import au.com.krynj.aoc.util.ds.DirectedGraph
-import java.lang.Exception
 import java.math.BigInteger
 
-class DayFive: AoCDay<List<List<String>>>, AoCObservable {
+class DayFive: AoCDay<List<List<String>>>, AoCObservable<SimpleObserverContext> {
 
-    private val observers: MutableList<AoCObserver> = ArrayList()
+    private val observers: MutableList<AoCObserver<SimpleObserverContext>> = ArrayList()
 
     override fun run() {
         println(addColour("Day Five", CYAN))
@@ -75,12 +72,12 @@ class DayFive: AoCDay<List<List<String>>>, AoCObservable {
         return result.toBigInteger()
     }
 
-    override fun addObserver(observer: AoCObserver) {
+    override fun addObserver(observer: AoCObserver<SimpleObserverContext>) {
         observers.add(observer)
     }
 
-    override fun broadcast(partialResult: BigInteger) {
-        observers.forEach { it.notify(partialResult) }
+    override fun broadcast(context: SimpleObserverContext) {
+        observers.forEach { it.notify(context) }
     }
 
 

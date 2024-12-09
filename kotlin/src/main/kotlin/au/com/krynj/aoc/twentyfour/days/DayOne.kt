@@ -1,8 +1,6 @@
 package au.com.krynj.aoc.twentyfour.days
 
-import au.com.krynj.aoc.framework.AoCDay
-import au.com.krynj.aoc.framework.AoCObservable
-import au.com.krynj.aoc.framework.AoCObserver
+import au.com.krynj.aoc.framework.*
 import au.com.krynj.aoc.util.AoCConsoleColours
 import au.com.krynj.aoc.util.AoCConsoleColours.CYAN
 import au.com.krynj.aoc.util.AoCConsoleColours.addColour
@@ -12,9 +10,9 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.LinkedHashMap
 
-class DayOne : AoCDay<List<String>>, AoCObservable {
+class DayOne : AoCDay<List<String>>, AoCObservable<AoCObserverContext> {
 
-    private val observers: MutableList<AoCObserver> = ArrayList()
+    private val observers: MutableList<AoCObserver<AoCObserverContext>> = ArrayList()
 
     override fun run() {
         println(addColour("Day One", CYAN))
@@ -44,7 +42,7 @@ class DayOne : AoCDay<List<String>>, AoCObservable {
         while (lists.first.isNotEmpty() && lists.second.isNotEmpty()) {
             val diff = lists.first.poll().subtract(lists.second.poll()).abs()
             distanceTotal = distanceTotal.add(diff)
-            broadcast(diff)
+            broadcast(SimpleObserverContext(diff))
         }
         return distanceTotal
     }
@@ -53,7 +51,7 @@ class DayOne : AoCDay<List<String>>, AoCObservable {
         // Convert to int list pair
         val counts: Pair<MutableMap<BigInteger, BigInteger>, MutableMap<BigInteger, BigInteger>> =
             Pair(LinkedHashMap(), LinkedHashMap())
-        inputLines.forEach() { line ->
+        inputLines.forEach { line ->
             val lineInts: List<BigInteger> = AoCUtil.readLineAsBigInt(line, "   ")
             assert(lineInts.size == 2)
             // Add entries
@@ -76,7 +74,7 @@ class DayOne : AoCDay<List<String>>, AoCObservable {
         counts.first.keys.forEach { leftNum ->
             if (leftNum in counts.second.keys) distanceTotal =
                 distanceTotal.plus(leftNum.multiply(counts.first[leftNum]!!.multiply(counts.second[leftNum])))
-            broadcast(distanceTotal)
+            broadcast(SimpleObserverContext(distanceTotal))
         }
 
         return distanceTotal
@@ -96,13 +94,13 @@ class DayOne : AoCDay<List<String>>, AoCObservable {
         return result
     }
 
-    override fun addObserver(observer: AoCObserver) {
+    override fun addObserver(observer: AoCObserver<AoCObserverContext>) {
         observers.add(observer)
     }
 
-    override fun broadcast(partialResult: BigInteger) {
+    override fun broadcast(context: AoCObserverContext) {
         observers.forEach {
-            it.notify(partialResult)
+            it.notify(context)
         }
     }
 

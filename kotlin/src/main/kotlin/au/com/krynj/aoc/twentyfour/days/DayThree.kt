@@ -1,17 +1,15 @@
 package au.com.krynj.aoc.twentyfour.days
 
-import au.com.krynj.aoc.framework.AoCDay
-import au.com.krynj.aoc.framework.AoCObservable
-import au.com.krynj.aoc.framework.AoCObserver
+import au.com.krynj.aoc.framework.*
 import au.com.krynj.aoc.util.AoCConsoleColours
 import au.com.krynj.aoc.util.AoCConsoleColours.CYAN
 import au.com.krynj.aoc.util.AoCConsoleColours.addColour
 import au.com.krynj.aoc.util.AoCUtil
 import java.math.BigInteger
 
-class DayThree: AoCDay<List<String>>, AoCObservable {
+class DayThree: AoCDay<List<String>>, AoCObservable<AoCObserverContext> {
 
-    private val observers: MutableList<AoCObserver> = ArrayList()
+    private val observers: MutableList<AoCObserver<AoCObserverContext>> = ArrayList()
     override fun getDay(): Int {
         return 3
     }
@@ -23,7 +21,7 @@ class DayThree: AoCDay<List<String>>, AoCObservable {
             allMatches.forEach { res ->
                 val (a, b) = res.destructured
                 result = result.add(a.toBigInteger().multiply(b.toBigInteger()))
-                broadcast(result)
+                broadcast(SimpleObserverContext(result))
             }
         }
         return result
@@ -44,11 +42,11 @@ class DayThree: AoCDay<List<String>>, AoCObservable {
             .format(partTwo(AoCUtil.readResourceFile("daythree/input.txt"))))
     }
 
-    override fun addObserver(observer: AoCObserver) {
+    override fun addObserver(observer: AoCObserver<AoCObserverContext>) {
         observers.add(observer)
     }
 
-    override fun broadcast(partialResult: BigInteger) {
-        observers.forEach { it.notify(partialResult) }
+    override fun broadcast(context: AoCObserverContext) {
+        observers.forEach { it.notify(context) }
     }
 }

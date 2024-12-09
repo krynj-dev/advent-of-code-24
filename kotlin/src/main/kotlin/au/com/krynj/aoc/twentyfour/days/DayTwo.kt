@@ -1,8 +1,6 @@
 package au.com.krynj.aoc.twentyfour.days
 
-import au.com.krynj.aoc.framework.AoCDay
-import au.com.krynj.aoc.framework.AoCObservable
-import au.com.krynj.aoc.framework.AoCObserver
+import au.com.krynj.aoc.framework.*
 import au.com.krynj.aoc.util.AoCConsoleColours
 import au.com.krynj.aoc.util.AoCConsoleColours.CYAN
 import au.com.krynj.aoc.util.AoCConsoleColours.GREEN
@@ -14,9 +12,9 @@ import kotlin.collections.ArrayList
 import kotlin.math.abs
 import kotlin.math.sign
 
-class DayTwo : AoCDay<List<String>>, AoCObservable {
+class DayTwo : AoCDay<List<String>>, AoCObservable<AoCObserverContext> {
 
-    private val observers: MutableList<AoCObserver> = ArrayList()
+    private val observers: MutableList<AoCObserver<AoCObserverContext>> = ArrayList()
 
     override fun run() {
         println(addColour("Day Two", CYAN))
@@ -34,7 +32,7 @@ class DayTwo : AoCDay<List<String>>, AoCObservable {
         var count = BigInteger.ZERO
         diffArray(AoCUtil.readLinesAsInt(inputLines, ' ')).forEach{
             if (validityFilter(it)) count = count.add(BigInteger.ONE)
-            broadcast(count)
+            broadcast(SimpleObserverContext(count))
         }
         return count
     }
@@ -107,13 +105,9 @@ class DayTwo : AoCDay<List<String>>, AoCObservable {
         var count = BigInteger.ZERO
         inputLines.forEach{
             if (validityFilterTwo(AoCUtil.readLineAsInt(it, ' '))) count = count.add(BigInteger.ONE)
-            broadcast(count)
+            broadcast(SimpleObserverContext(count))
         }
         return count
-    }
-
-    fun partOneConcise(inputLines: List<String>): BigInteger {
-        return BigInteger.ONE
     }
 
     fun diffArray(intArray: List<List<Int>>): List<List<Int>> {
@@ -122,13 +116,13 @@ class DayTwo : AoCDay<List<String>>, AoCObservable {
         }
     }
 
-    override fun addObserver(observer: AoCObserver) {
+    override fun addObserver(observer: AoCObserver<AoCObserverContext>) {
         observers.add(observer)
     }
 
-    override fun broadcast(partialResult: BigInteger) {
+    override fun broadcast(context: AoCObserverContext) {
         observers.forEach {
-            it.notify(partialResult)
+            it.notify(context)
         }
     }
 

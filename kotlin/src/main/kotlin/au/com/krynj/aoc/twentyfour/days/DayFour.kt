@@ -3,6 +3,7 @@ package au.com.krynj.aoc.twentyfour.days
 import au.com.krynj.aoc.framework.AoCDay
 import au.com.krynj.aoc.framework.AoCObservable
 import au.com.krynj.aoc.framework.AoCObserver
+import au.com.krynj.aoc.framework.SimpleObserverContext
 import au.com.krynj.aoc.util.AoCAlgorithmUtil.findAround
 import au.com.krynj.aoc.util.AoCConsoleColours
 import au.com.krynj.aoc.util.AoCConsoleColours.CYAN
@@ -12,9 +13,9 @@ import java.math.BigInteger
 import kotlin.math.abs
 import kotlin.math.sign
 
-class DayFour : AoCDay<List<String>>, AoCObservable {
+class DayFour : AoCDay<List<String>>, AoCObservable<SimpleObserverContext> {
 
-    private val observers: MutableList<AoCObserver> = ArrayList()
+    private val observers: MutableList<AoCObserver<SimpleObserverContext>> = ArrayList()
 
     override fun getDay(): Int {
         return 4
@@ -75,11 +76,11 @@ class DayFour : AoCDay<List<String>>, AoCObservable {
             .format(partTwo(AoCUtil.readResourceFile("dayfour/input.txt"))))
     }
 
-    override fun addObserver(observer: AoCObserver) {
+    override fun addObserver(observer: AoCObserver<SimpleObserverContext>) {
         observers.add(observer)
     }
 
-    override fun broadcast(partialResult: BigInteger) {
-        observers.forEach { it.notify(partialResult) }
+    override fun broadcast(context: SimpleObserverContext) {
+        observers.forEach { it.notify(context) }
     }
 }

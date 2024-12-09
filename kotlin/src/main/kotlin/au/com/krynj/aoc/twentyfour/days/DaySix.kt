@@ -3,15 +3,18 @@ package au.com.krynj.aoc.twentyfour.days
 import au.com.krynj.aoc.framework.AoCDay
 import au.com.krynj.aoc.framework.AoCObservable
 import au.com.krynj.aoc.framework.AoCObserver
+import au.com.krynj.aoc.framework.SimpleObserverContext
+import au.com.krynj.aoc.util.AoCConsoleColours
 import au.com.krynj.aoc.util.AoCConsoleColours.CYAN
 import au.com.krynj.aoc.util.AoCConsoleColours.GREEN
 import au.com.krynj.aoc.util.AoCConsoleColours.addColour
 import au.com.krynj.aoc.util.AoCUtil
 import java.math.BigInteger
+import kotlin.math.ln
 
-class DaySix: AoCDay<List<String>>, AoCObservable {
+class DaySix: AoCDay<List<String>>, AoCObservable<SimpleObserverContext> {
 
-    private val observers: MutableList<AoCObserver> = ArrayList()
+    private val observers: MutableList<AoCObserver<SimpleObserverContext>> = ArrayList()
 
     override fun run() {
         println(addColour("Day Six", CYAN))
@@ -34,112 +37,86 @@ class DaySix: AoCDay<List<String>>, AoCObservable {
 
     override fun partOne(inputLines: List<String>): BigInteger {
         val visited: MutableMap<Pair<Int, Int>, MutableSet<Pair<Int, Int>>> = mutableMapOf()
-
         val startloc = inputLines.joinToString("") { it }.indexOfAny("^>V<".toCharArray())
-        val y = startloc / inputLines.first().length
-        val x = startloc % inputLines.first().length
-        val dir = directionMap[inputLines[y][x]]!!
-        mainLoop(inputLines, y, x, dir, visited)
+        var pos = Pair(startloc / inputLines.first().length, startloc % inputLines.first().length)
+        var dir = directionMap[inputLines[pos.first][pos.second]]!!
+        while (true) {
+            if (pos !in visited.keys) visited[pos] = mutableSetOf(dir) else visited[pos]!!.add(dir)
+            var curDir = dir
+            val next = pickNextLocation(pos.first, pos.second, dir, inputLines) ?: break
+            while (curDir != next.second) {
+                curDir = rotate90(curDir)
+                visited[pos]!!.add(curDir)
+            }
+            pos = next.first
+            dir = next.second
+        }
         return visited.size.toBigInteger()
     }
 
     override fun partTwo(inputLines: List<String>): BigInteger {
-        // Second Answer 1388 too low
+        // Second Answer 1388 too low, 3412 too high, 3176 wrong
+        var result: MutableSet<Pair<Int, Int>> = mutableSetOf()
         val visited: MutableMap<Pair<Int, Int>, MutableSet<Pair<Int, Int>>> = mutableMapOf()
-
         val startloc = inputLines.joinToString("") { it }.indexOfAny("^>V<".toCharArray())
-        val y = startloc / inputLines.first().length
-        val x = startloc % inputLines.first().length
-
-        val dir = directionMap[inputLines[y][x]]!!
-        mainLoop(inputLines, y, x, dir, visited)
-
-        return mainLoop(inputLines, y, x, dir, visited).toBigInteger()
+        var pos = Pair(startloc / inputLines.first().length, startloc % inputLines.first().length)
+        var dir = directionMap[inputLines[pos.first][pos.second]]!!
+        while (true) {
+            if (pos !in visited.keys) visited[pos] = mutableSetOf(dir) else visited[pos]!!.add(dir)
+            if (willLoop(pos, dir, inputLines) && Pair(pos.first+dir.first, pos.second+dir.second) != Pair(startloc / inputLines.first().length, startloc % inputLines.first().length)) {
+                result.add(Pair(pos.first+dir.first, pos.second+dir.second))
+            }
+            var curDir = dir
+            val next = pickNextLocation(pos.first, pos.second, dir, inputLines) ?: break
+            while (curDir != next.second) {
+                curDir = rotate90(curDir)
+                visited[pos]!!.add(curDir)
+            }
+            pos = next.first
+            dir = next.second
+        }
+        return result.size.toBigInteger()
     }
 
-    fun mainLoop(puzzleMap: List<String>, startY: Int, startX: Int, startDir: Pair<Int, Int>,
-                 visited: MutableMap<Pair<Int, Int>, MutableSet<Pair<Int,Int>>>): Int {
-        var barricades = mutableSetOf<Pair<Int, Int>>()
-        var y = startY
-        var x = startX
-        var dir = startDir
-        while (y in puzzleMap.indices && x in puzzleMap.first().indices) {
-            var nextY = y + dir.first
-            var nextX = x + dir.second
-            if (nextX in puzzleMap.first().indices && nextY in puzzleMap.indices) {
-                if (puzzleMap[nextY][nextX] == '#') {
-                    dir = rotate90(dir)
-                    nextY = y + dir.first
-                    nextX = x + dir.second
-                } else {
-                    // Scan for next # 90 degrees
-                    val scanDir = rotate90(dir)
-//                    if (doesLoop(y, x, puzzleMap, scanDir)) { // Brute force no good
-//                        barricades.add(Pair(nextY, nextX))
-//                    }
-                    if (doesLoopFast(y, x, puzzleMap, scanDir, visited))  barricades.add(Pair(nextY, nextX))
-                }
-            }
-            visited.putIfAbsent(Pair(y, x), mutableSetOf(dir))
-            visited[Pair(y, x)]!!.add(dir)
-            y = nextY
-            x = nextX
-        }
-        return barricades.size
-    }
-
-    fun doesLoop(startY: Int, startX: Int, puzzleMap: List<String>, startDir: Pair<Int, Int>): Boolean {
-        val visited: MutableMap<Pair<Int, Int>, MutableSet<Pair<Int, Int>>> = mutableMapOf()
-        var y = startY
-        var x = startX
-        var dir = startDir
-        while (y in puzzleMap.indices && x in puzzleMap.first().indices) {
-            var nextY = y + dir.first
-            var nextX = x + dir.second
-            if (nextX in puzzleMap.first().indices && nextY in puzzleMap.indices) {
-                if (y == startY && x == startX && visited[Pair(y, x)]?.contains(startDir) == true) return true
-                if (puzzleMap[nextY][nextX] == '#') {
-                    dir = rotate90(dir)
-                    nextY = y + dir.first
-                    nextX = x + dir.second
-                }
-            }
-            visited.putIfAbsent(Pair(y, x), mutableSetOf(dir))
-            visited[Pair(y, x)]!!.add(dir)
-            y = nextY
-            x = nextX
-        }
-        return false
-    }
-
-    fun doesLoopFast(startY: Int, startX: Int, puzzleMap: List<String>, dir: Pair<Int, Int>,
-                     visited: MutableMap<Pair<Int, Int>, MutableSet<Pair<Int, Int>>>): Boolean {
-        var y = startY
-        var x = startX
-        while (y + dir.first in puzzleMap.indices && x + dir.second in puzzleMap.first().indices
-            && puzzleMap[y][x] != '#') {
-            val nextY = y + dir.first
-            val nextX = x + dir.second
-            if (puzzleMap[nextY][nextX] == '#' && (visited[Pair(y, x)]?.contains(rotate90(dir)) == true
-                        || visited[Pair(y, x)]?.contains(dir) == true)) {
-                return true
-            }
-            y = nextY
-            x = nextX
-        }
-        return false
+    fun willLoop(currentPos: Pair<Int, Int>, currentDir: Pair<Int, Int>, puzzleMap: List<String>): Boolean {
+        val (nextY, nextX) = Pair(currentPos.first + currentDir.first, currentPos.second + currentDir.second)
+        if (nextY !in puzzleMap.indices || nextX !in puzzleMap.first().indices || puzzleMap[nextY][nextX] == '#') return false
+        val scanDir = rotate90(currentDir)
+//      Make sure we make it back to self
+        var loopPos = currentPos
+        var loopDir = scanDir
+        var loops = 0
+        do {
+            loops++
+            val loopNext = pickNextLocation(loopPos.first, loopPos.second, loopDir, puzzleMap) ?: return false
+            loopPos = loopNext.first
+            loopDir = loopNext.second
+        } while (!(loopPos == currentPos && loopDir == currentDir) && loops < 1000)
+        return true
     }
 
     fun rotate90(dir: Pair<Int, Int>): Pair<Int, Int> {
         return Pair(dir.second, -dir.first)
     }
 
-    override fun addObserver(observer: AoCObserver) {
+    override fun addObserver(observer: AoCObserver<SimpleObserverContext>) {
         observers.add(observer)
     }
 
-    override fun broadcast(partialResult: BigInteger) {
-        observers.forEach { it.notify(partialResult) }
+    override fun broadcast(context: SimpleObserverContext) {
+        observers.forEach { it.notify(context) }
+    }
+
+    fun pickNextLocation(currentY: Int, currentX: Int, currentDir: Pair<Int, Int>, puzzleMap: List<String>): Pair<Pair<Int, Int>, Pair<Int, Int>>? {
+        var (nextY, nextX) = Pair(currentY + currentDir.first, currentX + currentDir.second)
+        var nextDir = currentDir
+        if (nextY !in puzzleMap.indices || nextX !in puzzleMap.first().indices) return null
+        while (puzzleMap[nextY][nextX] == '#') {
+            nextDir = rotate90(nextDir)
+            nextY = currentY + nextDir.first
+            nextX = currentX + nextDir.second
+        }
+        return Pair(Pair(nextY, nextX), nextDir)
     }
 
 

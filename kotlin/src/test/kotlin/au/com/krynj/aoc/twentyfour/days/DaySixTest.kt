@@ -23,6 +23,13 @@ class DaySixTest {
     }
 
     @Test
+    fun testPartTwoAlt() {
+        val daySix = DaySix()
+        val result = daySix.partTwo(AoCUtil.readResourceFile("daysix/example-2.txt"))
+        assertEquals(2.toBigInteger(), result)
+    }
+
+    @Test
     fun testRotate() {
         var dir = Pair(1, 0) // Down
         val expectedResults = listOf(

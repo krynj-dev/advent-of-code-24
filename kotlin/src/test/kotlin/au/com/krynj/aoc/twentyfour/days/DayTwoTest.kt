@@ -88,49 +88,6 @@ class DayTwoTest {
         assertFalse(dayTwo.validityFilterTwo(listOf(1, 8, 10, 11, 12, 19)))
     }
 
-
-    @Test
-    fun testPartOneConcise() {
-        val dayTwo = DayTwo()
-        val result: BigInteger = dayTwo.partOneConcise(AoCUtil.readResourceFile("dayTwo/example-2-1.txt"))
-
-        assertEquals(11.toBigInteger(), result)
-    }
-
-    @Test
-    fun testPartOneConciseSameResult() {
-        val DayTwo = DayTwo()
-        val partOnePath = "dayTwo/input.txt"
-        // Ensure Same result
-        assertEquals(
-            DayTwo.partOne(AoCUtil.readResourceFile(partOnePath)),
-            DayTwo.partOneConcise(AoCUtil.readResourceFile(partOnePath))
-        )
-    }
-
-    @Test
-    fun testPartOneTimings() {
-        val dayTwo = DayTwo()
-        val partOnePath = "dayTwo/input.txt"
-        val timesOG = ArrayList<Long>()
-        val timesNew = ArrayList<Long>()
-        repeat(500) {
-            val timeOriginal = measureTime {
-                dayTwo.partOne(AoCUtil.readResourceFile(partOnePath))
-            }
-            val timeConcise = measureTime {
-                dayTwo.partOneConcise(AoCUtil.readResourceFile(partOnePath))
-            }
-            timesOG.add(timeOriginal.inWholeMicroseconds)
-            timesNew.add(timeConcise.inWholeMicroseconds)
-        }
-        println(
-            "Time taken average (original, concise):\t%f\t%f".format(
-                timesOG.average(), timesNew.average()
-            )
-        )
-    }
-
     @Test
     fun testPartTwoExampleInput() {
         val dayTwo = DayTwo()
