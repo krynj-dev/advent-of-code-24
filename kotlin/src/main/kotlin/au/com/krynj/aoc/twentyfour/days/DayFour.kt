@@ -12,7 +12,7 @@ import java.math.BigInteger
 import kotlin.math.abs
 import kotlin.math.sign
 
-class DayFour : AoCDay, AoCObservable {
+class DayFour : AoCDay<List<String>>, AoCObservable {
 
     private val observers: MutableList<AoCObserver> = ArrayList()
 

@@ -14,7 +14,7 @@ import kotlin.collections.ArrayList
 import kotlin.math.abs
 import kotlin.math.sign
 
-class DayTwo : AoCDay, AoCObservable {
+class DayTwo : AoCDay<List<String>>, AoCObservable {
 
     private val observers: MutableList<AoCObserver> = ArrayList()
 

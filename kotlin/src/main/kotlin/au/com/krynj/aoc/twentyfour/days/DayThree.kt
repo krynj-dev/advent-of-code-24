@@ -9,7 +9,7 @@ import au.com.krynj.aoc.util.AoCConsoleColours.addColour
 import au.com.krynj.aoc.util.AoCUtil
 import java.math.BigInteger
 
-class DayThree: AoCDay, AoCObservable {
+class DayThree: AoCDay<List<String>>, AoCObservable {
 
     private val observers: MutableList<AoCObserver> = ArrayList()
     override fun getDay(): Int {

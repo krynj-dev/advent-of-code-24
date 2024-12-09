@@ -12,7 +12,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.LinkedHashMap
 
-class DayOne : AoCDay, AoCObservable {
+class DayOne : AoCDay<List<String>>, AoCObservable {
 
     private val observers: MutableList<AoCObserver> = ArrayList()
 
