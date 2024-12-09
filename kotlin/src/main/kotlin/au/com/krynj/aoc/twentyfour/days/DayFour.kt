@@ -7,11 +7,14 @@ import au.com.krynj.aoc.framework.SimpleObserverContext
 import au.com.krynj.aoc.util.AoCAlgorithmUtil.findAround
 import au.com.krynj.aoc.util.AoCConsoleColours
 import au.com.krynj.aoc.util.AoCConsoleColours.CYAN
+import au.com.krynj.aoc.util.AoCConsoleColours.GREEN
+import au.com.krynj.aoc.util.AoCConsoleColours.YELLOW
 import au.com.krynj.aoc.util.AoCConsoleColours.addColour
 import au.com.krynj.aoc.util.AoCUtil
 import java.math.BigInteger
 import kotlin.math.abs
 import kotlin.math.sign
+import kotlin.time.measureTime
 
 class DayFour : AoCDay<List<String>>, AoCObservable<SimpleObserverContext> {
 
@@ -70,10 +73,16 @@ class DayFour : AoCDay<List<String>>, AoCObservable<SimpleObserverContext> {
 
     override fun run() {
         println(addColour("Day Four", CYAN))
-        println("Part 1: " + addColour("%d", AoCConsoleColours.GREEN)
-            .format(partOne(AoCUtil.readResourceFile("dayfour/input.txt"))))
-        println("Part 2: " + addColour("%d", AoCConsoleColours.GREEN)
-            .format(partTwo(AoCUtil.readResourceFile("dayfour/input.txt"))))
+        val result1: BigInteger
+        val time1 = measureTime {
+            result1 = partOne(AoCUtil.readResourceFile("input-4.txt"))
+        }
+        println("Part 1: ${addColour("$result1", GREEN)} ${addColour("(${time1.inWholeMilliseconds}ms)", YELLOW)}")
+        val result2: BigInteger
+        val time2 = measureTime {
+            result2 = partTwo(AoCUtil.readResourceFile("input-4.txt"))
+        }
+        println("Part 2: ${addColour("$result2", GREEN)} ${addColour("(${time2.inWholeMilliseconds}ms)", YELLOW)}")
     }
 
     override fun addObserver(observer: AoCObserver<SimpleObserverContext>) {

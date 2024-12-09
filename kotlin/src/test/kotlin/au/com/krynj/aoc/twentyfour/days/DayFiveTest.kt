@@ -10,14 +10,14 @@ class DayFiveTest {
     @Test
     fun partOne() {
         val dayFive = DayFive()
-        val result = dayFive.partOne(AoCUtil.readResourceFile("dayfive/example.txt", ""))
+        val result = dayFive.partOne(AoCUtil.readResourceFile("example-5-1.txt", ""))
         assertEquals(143.toBigInteger(), result)
     }
 
     @Test
     fun partTwo() {
         val dayFive = DayFive()
-        val result = dayFive.partTwo(AoCUtil.readResourceFile("dayfive/example.txt", ""))
+        val result = dayFive.partTwo(AoCUtil.readResourceFile("example-5-1.txt", ""))
         assertEquals(123.toBigInteger(), result)
     }
 }

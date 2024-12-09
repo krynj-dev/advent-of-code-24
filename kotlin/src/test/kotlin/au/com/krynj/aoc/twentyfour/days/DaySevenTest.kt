@@ -4,21 +4,20 @@ import au.com.krynj.aoc.util.AoCUtil
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
-import java.math.BigInteger
 
 class DaySevenTest {
 
     @Test
     fun testPartOne() {
         val daySeven = DaySeven()
-        val result = daySeven.partOne(AoCUtil.readResourceFile("dayseven/example.txt"))
+        val result = daySeven.partOne(AoCUtil.readResourceFile("example-7-1.txt"))
         assertEquals(3749.toBigInteger(), result)
     }
 
     @Test
     fun testPartTwo() {
         val daySeven = DaySeven()
-        val result = daySeven.partTwo(AoCUtil.readResourceFile("dayseven/example.txt"))
+        val result = daySeven.partTwo(AoCUtil.readResourceFile("example-7-1.txt"))
         assertEquals(11387.toBigInteger(), result)
     }
 

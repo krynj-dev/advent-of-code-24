@@ -3,9 +3,12 @@ package au.com.krynj.aoc.twentyfour.days
 import au.com.krynj.aoc.framework.*
 import au.com.krynj.aoc.util.AoCConsoleColours
 import au.com.krynj.aoc.util.AoCConsoleColours.CYAN
+import au.com.krynj.aoc.util.AoCConsoleColours.GREEN
+import au.com.krynj.aoc.util.AoCConsoleColours.YELLOW
 import au.com.krynj.aoc.util.AoCConsoleColours.addColour
 import au.com.krynj.aoc.util.AoCUtil
 import java.math.BigInteger
+import kotlin.time.measureTime
 
 class DayThree: AoCDay<List<String>>, AoCObservable<AoCObserverContext> {
 
@@ -36,10 +39,16 @@ class DayThree: AoCDay<List<String>>, AoCObservable<AoCObserverContext> {
 
     override fun run() {
         println(addColour("Day Three", CYAN))
-        println("Part 1: " + addColour("%d", AoCConsoleColours.GREEN)
-            .format(partOne(AoCUtil.readResourceFile("daythree/input.txt"))))
-        println("Part 2: " + addColour("%d", AoCConsoleColours.GREEN)
-            .format(partTwo(AoCUtil.readResourceFile("daythree/input.txt"))))
+        val result1: BigInteger
+        val time1 = measureTime {
+            result1 = partOne(AoCUtil.readResourceFile("input-3.txt"))
+        }
+        println("Part 1: ${addColour("$result1", GREEN)} ${addColour("(${time1.inWholeMilliseconds}ms)", YELLOW)}")
+        val result2: BigInteger
+        val time2 = measureTime {
+            result2 = partTwo(AoCUtil.readResourceFile("input-3.txt"))
+        }
+        println("Part 2: ${addColour("$result2", GREEN)} ${addColour("(${time2.inWholeMilliseconds}ms)", YELLOW)}")
     }
 
     override fun addObserver(observer: AoCObserver<AoCObserverContext>) {

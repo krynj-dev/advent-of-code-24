@@ -4,28 +4,27 @@ import au.com.krynj.aoc.util.AoCUtil
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
-import kotlin.math.*
 
 class DaySixTest {
 
     @Test
     fun testPartOne() {
         val daySix = DaySix()
-        val result = daySix.partOne(AoCUtil.readResourceFile("daysix/example.txt"))
+        val result = daySix.partOne(AoCUtil.readResourceFile("example-6-1.txt"))
         assertEquals(41.toBigInteger(), result)
     }
 
     @Test
     fun testPartTwo() {
         val daySix = DaySix()
-        val result = daySix.partTwo(AoCUtil.readResourceFile("daysix/example.txt"))
+        val result = daySix.partTwo(AoCUtil.readResourceFile("example-6-1.txt"))
         assertEquals(6.toBigInteger(), result)
     }
 
     @Test
     fun testPartTwoAlt() {
         val daySix = DaySix()
-        val result = daySix.partTwo(AoCUtil.readResourceFile("daysix/example-2.txt"))
+        val result = daySix.partTwo(AoCUtil.readResourceFile("example-6-2.txt"))
         assertEquals(2.toBigInteger(), result)
     }
 

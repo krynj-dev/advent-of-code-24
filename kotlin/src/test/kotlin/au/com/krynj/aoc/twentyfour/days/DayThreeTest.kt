@@ -23,7 +23,7 @@ class DayThreeTest {
             )
         )
 
-        val result: BigInteger = dayThree.partOne(AoCUtil.readResourceFile("daythree/example.txt"))
+        val result: BigInteger = dayThree.partOne(AoCUtil.readResourceFile("example-3-1.txt"))
 
         assertEquals(161.toBigInteger(), result)
     }
@@ -40,7 +40,7 @@ class DayThreeTest {
             )
         )
 
-        val result: BigInteger = dayThree.partTwo(AoCUtil.readResourceFile("daythree/example-2.txt"))
+        val result: BigInteger = dayThree.partTwo(AoCUtil.readResourceFile("example-3-2.txt"))
 
         assertEquals(48.toBigInteger(), result)
     }

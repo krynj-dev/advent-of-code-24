@@ -25,7 +25,7 @@ class DayOneTest {
             )
         )
 
-        val result: BigInteger = dayOne.partOne(AoCUtil.readResourceFile("dayone/example-1-1.txt"))
+        val result: BigInteger = dayOne.partOne(AoCUtil.readResourceFile("example-1-1.txt"))
 
         assertEquals(11.toBigInteger(), result)
     }
@@ -33,7 +33,7 @@ class DayOneTest {
     @Test
     fun testPartOneConcise() {
         val dayOne = DayOne()
-        val result: BigInteger = dayOne.partOneConcise(AoCUtil.readResourceFile("dayone/example-1-1.txt"))
+        val result: BigInteger = dayOne.partOneConcise(AoCUtil.readResourceFile("example-1-1.txt"))
 
         assertEquals(11.toBigInteger(), result)
     }
@@ -41,7 +41,7 @@ class DayOneTest {
     @Test
     fun testPartOneConciseSameResult() {
         val dayOne = DayOne()
-        val partOnePath = "dayone/input.txt"
+        val partOnePath = "input-1.txt"
         // Ensure Same result
         assertEquals(
             dayOne.partOne(AoCUtil.readResourceFile(partOnePath)),
@@ -52,7 +52,7 @@ class DayOneTest {
     @Test
     fun testPartOneTimings() {
         val dayOne = DayOne()
-        val partOnePath = "dayone/input.txt"
+        val partOnePath = "input-1.txt"
         val timesOG = ArrayList<Long>()
         val timesNew = ArrayList<Long>()
         repeat(500) {
@@ -86,7 +86,7 @@ class DayOneTest {
             )
         )
 
-        val result: BigInteger = dayOne.partTwo(AoCUtil.readResourceFile("dayone/example-1-1.txt"))
+        val result: BigInteger = dayOne.partTwo(AoCUtil.readResourceFile("example-1-1.txt"))
 
         assertEquals(31.toBigInteger(), result)
     }
