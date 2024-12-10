@@ -73,7 +73,7 @@ class DayEight : AoCDay<List<String>>, AoCObservable<SimpleObserverContext> {
                 antList.subList(i + 1, antList.size).forEach { b ->
                     val distance = subtractVector(a, b)
                     val foundNodes = if (!countAll) {
-                        mutableSetOf(subtractVector(a, distance), addVector(b, distance)).filter { an ->
+                        mutableSetOf(subtractVector(b, distance), addVector(a, distance)).filter { an ->
                             an.first in puzzleMap.indices && an.second in puzzleMap.first().indices
                         }.toMutableSet()
                     } else {

@@ -37,4 +37,9 @@ class DayNineTest {
         assertEquals(expected, actual)
     }
 
+
+    @Test
+    fun testRun() {
+        val dayNine = DayNine().run()
+    }
 }

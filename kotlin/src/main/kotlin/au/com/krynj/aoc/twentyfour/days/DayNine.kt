@@ -10,6 +10,7 @@ import au.com.krynj.aoc.util.AoCConsoleColours.YELLOW
 import au.com.krynj.aoc.util.AoCConsoleColours.addColour
 import au.com.krynj.aoc.util.AoCUtil
 import java.math.BigInteger
+import kotlin.math.min
 import kotlin.time.measureTime
 
 class DayNine : AoCDay<String>, AoCObservable<SimpleObserverContext> {
@@ -86,7 +87,6 @@ class DayNine : AoCDay<String>, AoCObservable<SimpleObserverContext> {
         val spacesCopy: MutableList<Int> = mutableListOf()
         spacesCopy.addAll(spaces)
         val visited: MutableSet<Int> = mutableSetOf()
-
         var rPos = filesCopy.size-1
         while (visited.size < files.size) {
             // Move left until next unchecked file
@@ -95,7 +95,6 @@ class DayNine : AoCDay<String>, AoCObservable<SimpleObserverContext> {
             }
             // find slot to move file to
             visited.add(filesCopy[rPos].first)
-            // TODO speed up by replacing the indexOfFirst call with a look to a map of size->location
             val openSlotInd = spacesCopy.indexOfFirst { it >= filesCopy[rPos].second }
             if (openSlotInd in 0..<rPos) {
                 val toMove = filesCopy[rPos]
