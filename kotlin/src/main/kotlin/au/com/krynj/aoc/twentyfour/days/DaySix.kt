@@ -62,7 +62,6 @@ class DaySix: AoCDay<List<String>>, AoCObservable<SimpleObserverContext> {
     }
 
     override fun partTwo(inputLines: List<String>): BigInteger {
-        // Second Answer 1388 too low, 3412 too high, 3176 wrong
         var result: MutableSet<Pair<Int, Int>> = mutableSetOf()
         val visited: MutableMap<Pair<Int, Int>, MutableSet<Pair<Int, Int>>> = mutableMapOf()
         val startloc = inputLines.joinToString("") { it }.indexOfAny("^>V<".toCharArray())
@@ -70,7 +69,8 @@ class DaySix: AoCDay<List<String>>, AoCObservable<SimpleObserverContext> {
         var dir = directionMap[inputLines[pos.first][pos.second]]!!
         while (true) {
             if (pos !in visited.keys) visited[pos] = mutableSetOf(dir) else visited[pos]!!.add(dir)
-            if (willLoop(pos, dir, inputLines) && Pair(pos.first+dir.first, pos.second+dir.second) != Pair(startloc / inputLines.first().length, startloc % inputLines.first().length)) {
+            if (willLoop(pos, dir, inputLines) && Pair(pos.first+dir.first, pos.second+dir.second) != Pair(startloc / inputLines.first().length, startloc % inputLines.first().length)
+                && Pair(pos.first+dir.first, pos.second+dir.second) !in visited.keys) {
                 result.add(Pair(pos.first+dir.first, pos.second+dir.second))
             }
             var curDir = dir
@@ -86,19 +86,24 @@ class DaySix: AoCDay<List<String>>, AoCObservable<SimpleObserverContext> {
     }
 
     fun willLoop(currentPos: Pair<Int, Int>, currentDir: Pair<Int, Int>, puzzleMap: List<String>): Boolean {
+        val alteredMap = puzzleMap.toMutableList()
         val (nextY, nextX) = Pair(currentPos.first + currentDir.first, currentPos.second + currentDir.second)
-        if (nextY !in puzzleMap.indices || nextX !in puzzleMap.first().indices || puzzleMap[nextY][nextX] == '#') return false
-        val scanDir = rotate90(currentDir)
+        if (nextY !in alteredMap.indices || nextX !in alteredMap.first().indices || alteredMap[nextY][nextX] == '#') return false
+        alteredMap[nextY] = alteredMap[nextY].replaceRange(nextX..nextX, "#")
+//        val scanDir = rotate90(currentDir)
 //      Make sure we make it back to self
+        val visited: MutableMap<Pair<Int, Int>, MutableSet<Pair<Int, Int>>> = mutableMapOf(currentPos to mutableSetOf(currentDir))
         var loopPos = currentPos
-        var loopDir = scanDir
+        var loopDir = currentDir
         var loops = 0
         do {
             loops++
-            val loopNext = pickNextLocation(loopPos.first, loopPos.second, loopDir, puzzleMap) ?: return false
+            visited.getOrPut(loopPos) { mutableSetOf() }.add(loopDir)
+            val loopNext = pickNextLocation(loopPos.first, loopPos.second, loopDir, alteredMap) ?: return false
             loopPos = loopNext.first
             loopDir = loopNext.second
-        } while (!(loopPos == currentPos && loopDir == currentDir) && loops < 1000)
+
+        } while (!visited.getOrDefault(loopPos, setOf()).contains(loopDir))
         return true
     }
 
@@ -118,10 +123,10 @@ class DaySix: AoCDay<List<String>>, AoCObservable<SimpleObserverContext> {
         var (nextY, nextX) = Pair(currentY + currentDir.first, currentX + currentDir.second)
         var nextDir = currentDir
         if (nextY !in puzzleMap.indices || nextX !in puzzleMap.first().indices) return null
-        while (puzzleMap[nextY][nextX] == '#') {
+        if (puzzleMap[nextY][nextX] == '#') {
             nextDir = rotate90(nextDir)
-            nextY = currentY + nextDir.first
-            nextX = currentX + nextDir.second
+            nextY = currentY
+            nextX = currentX
         }
         return Pair(Pair(nextY, nextX), nextDir)
     }
