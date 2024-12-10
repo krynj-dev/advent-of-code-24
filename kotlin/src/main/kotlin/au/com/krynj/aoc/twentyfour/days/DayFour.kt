@@ -16,7 +16,7 @@ import kotlin.math.abs
 import kotlin.math.sign
 import kotlin.time.measureTime
 
-class DayFour : AoCDay<List<String>>, AoCObservable<SimpleObserverContext> {
+class DayFour : AoCDay<List<List<Char>>>, AoCObservable<SimpleObserverContext> {
 
     private val observers: MutableList<AoCObserver<SimpleObserverContext>> = ArrayList()
 
@@ -24,14 +24,14 @@ class DayFour : AoCDay<List<String>>, AoCObservable<SimpleObserverContext> {
         return 4
     }
 
-    override fun partOne(inputLines: List<String>): BigInteger {
+    override fun partOne(inputLines: List<List<Char>>): BigInteger {
         var result = 0
         inputLines.forEachIndexed { y, str ->
             str.forEachIndexed { x, c ->
                 if (c == 'X') {
-                    val mLocs = findAround(y, x, inputLines, 'M', 1)
+                    val mLocs = findAround(Pair(y, x), inputLines, 'M', 1)
                     val aLocs = mLocs.flatMap {
-                        findAround(it.first, it.second, inputLines, 'A', 1)
+                        findAround(it, inputLines, 'A', 1)
                             .filter { that ->
                                 Pair(
                                     (y - it.first).sign,
@@ -40,7 +40,7 @@ class DayFour : AoCDay<List<String>>, AoCObservable<SimpleObserverContext> {
                             }
                     }
                     val sLocs = aLocs.flatMap {
-                        findAround(it.first, it.second, inputLines, 'S', 1)
+                        findAround(it, inputLines, 'S', 1)
                             .filter { that ->
                                 Pair(
                                     (y - it.first).sign,
@@ -55,13 +55,13 @@ class DayFour : AoCDay<List<String>>, AoCObservable<SimpleObserverContext> {
         return result.toBigInteger()
     }
 
-    override fun partTwo(inputLines: List<String>): BigInteger {
+    override fun partTwo(inputLines: List<List<Char>>): BigInteger {
         var result = 0
         inputLines.forEachIndexed { y, str ->
             str.forEachIndexed { x, c ->
                 if (c == 'A') {
-                    val mLocs = findAround(y, x, inputLines, 'M', 1)
-                    val sLocs = findAround(y, x, inputLines, 'S', 1)
+                    val mLocs = findAround(Pair(y, x), inputLines, 'M', 1)
+                    val sLocs = findAround(Pair(y, x), inputLines, 'S', 1)
                     val crosses =
                         mLocs.filter { sLocs.any { that -> abs(it.first - that.first) == 2 && abs(it.second - that.second) == 2 } }
                     if (crosses.size == 2) result += 1
@@ -75,12 +75,12 @@ class DayFour : AoCDay<List<String>>, AoCObservable<SimpleObserverContext> {
         println(addColour("Day Four", CYAN))
         val result1: BigInteger
         val time1 = measureTime {
-            result1 = partOne(AoCUtil.readResourceFile("input-4.txt"))
+            result1 = partOne(AoCUtil.readResourceFile("input-4.txt").map { it.toCharArray().toList() })
         }
         println("Part 1: ${addColour("$result1", GREEN)} ${addColour("(${time1.inWholeMilliseconds}ms)", YELLOW)}")
         val result2: BigInteger
         val time2 = measureTime {
-            result2 = partTwo(AoCUtil.readResourceFile("input-4.txt"))
+            result2 = partTwo(AoCUtil.readResourceFile("input-4.txt").map { it.toCharArray().toList() })
         }
         println("Part 2: ${addColour("$result2", GREEN)} ${addColour("(${time2.inWholeMilliseconds}ms)", YELLOW)}")
     }
