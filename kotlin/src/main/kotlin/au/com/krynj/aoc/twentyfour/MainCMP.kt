@@ -1,33 +1,13 @@
 package au.com.krynj.aoc.twentyfour
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-
-@Composable
-@Preview
-fun App() {
-    var text by remember { mutableStateOf("Hello, World!") }
-
-    MaterialTheme {
-        Button(onClick = {
-            text = "Hello, Desktop!"
-        }) {
-            Text(text)
-        }
-    }
-}
+import au.com.krynj.aoc.cmp.AoCComposeAppLanding
+import au.com.krynj.aoc.framework.AoCApplication
 
 fun main() = application {
-    Window(onCloseRequest = ::exitApplication) {
-        App()
+    val app = AoCApplication("au.com.krynj.aoc")
+    Window(onCloseRequest = ::exitApplication, title = "Advent of Code 2024") {
+        AoCComposeAppLanding(app.getDayClasses())
     }
 }

@@ -26,6 +26,7 @@ dependencies {
     }
     implementation("au.com.krynj.aoc:aoc-kotlin-framework:0.1.0-SNAPSHOT")
     implementation("au.com.krynj.aoc:aoc-kotlin-utils:0.1.0-SNAPSHOT")
+    implementation("au.com.krynj.aoc:aoc-kotlin-compose:0.1.0-SNAPSHOT")
     implementation(compose.desktop.currentOs)
 }
 
