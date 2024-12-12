@@ -81,13 +81,14 @@ class DayEleven : AoCDay<List<Int>>, AoCObservable<AoCObserverContext> {
     }
 
     override fun partTwo(inputLines: List<Int>): BigInteger {
-        val stones = inputLines.map { it.toBigInteger() }
-        val depth = 75
-        val childrens = stones.map {
-            val g = bfsGraph(it, DirectedGraph(), depth)
-            g.edges.filter { it.weight == depth }.size.toBigInteger()
-        }
-        return childrens.reduce(BigInteger::add)
+        return ONE
+//        val stones = inputLines.map { it.toBigInteger() }
+//        val depth = 75
+//        val childrens = stones.map {
+//            val g = bfsGraph(it, DirectedGraph(), depth)
+//            g.edges.filter { it.weight == depth }.size.toBigInteger()
+//        }
+//        return childrens.reduce(BigInteger::add)
     }
 
     override fun addObserver(observer: AoCObserver<AoCObserverContext>) {
