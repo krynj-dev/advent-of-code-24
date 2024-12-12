@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="MainCMP" type="JetRunConfigurationType">
+    <option name="MAIN_CLASS_NAME" value="au.com.krynj.aoc.twentyfour.MainCMPKt" />
+    <module name="aoc-kotlin-24.main" />
+    <shortenClasspath name="NONE" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

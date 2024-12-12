@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Main" type="JetRunConfigurationType" nameIsGenerated="true">
-    <option name="MAIN_CLASS_NAME" value="au.com.krynj.aoc.twentyfour.Main" />
+  <configuration default="false" name="MainCLI" type="JetRunConfigurationType" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="au.com.krynj.aoc.twentyfour.MainCLI" />
     <module name="aoc-kotlin-24.main" />
     <shortenClasspath name="NONE" />
     <method v="2">
