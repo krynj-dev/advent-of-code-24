@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
 import java.math.BigInteger
+import java.util.LinkedList
 
 class DayElevenTest {
 
@@ -68,5 +69,30 @@ class DayElevenTest {
         return g.nodeChildren(node).flatMap {
             childrenAtDistance(it, depth + 1, distance, g)
         }
+    }
+
+    @Test
+    fun testNewMethod() {
+        val dayEleven = DayEleven()
+        val numCache: MutableMap<BigInteger, Pair<List<BigInteger>, Int>> = dayEleven.digitToDouble().toMutableMap()
+        val stones = listOf(17).map { it.toBigInteger() }
+        val maxDepth = 5
+        val maxes: MutableList<Pair<List<BigInteger>, Int>> = mutableListOf()
+        val x = stones.map {
+            val q = LinkedList<Pair<BigInteger, Int>>()
+            q.add(Pair(it, 0))
+            while (q.isNotEmpty()) {
+                val s = q.remove()
+                var digits = numCache[s.first]
+                if (digits == null) {
+                    val sc = dayEleven.getShortCut(s.first, numCache)
+                    digits = numCache.getOrPut(sc.first) { Pair(sc.second, sc.third) }
+                }
+                val totalDepth = s.second + digits.second
+                if (totalDepth >= maxDepth) maxes.add(Pair(digits.first, totalDepth))
+                else digits.first.forEach { l -> q.add(Pair(l, totalDepth)) }
+            }
+        }
+        assertEquals(55312.toBigInteger(), stones.map { dayEleven.getAt(it, numCache, 5).size.toBigInteger() }.reduce(BigInteger::plus))
     }
 }
