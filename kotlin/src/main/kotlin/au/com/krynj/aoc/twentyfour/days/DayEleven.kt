@@ -15,7 +15,9 @@ import java.math.BigInteger.ONE
 import java.math.BigInteger.ZERO
 import java.util.LinkedList
 import kotlin.math.log2
+import kotlin.math.min
 import kotlin.time.measureTime
+import kotlin.time.times
 
 
 class DayEleven : AoCDay<List<Int>>, AoCObservable<AoCObserverContext> {
@@ -196,7 +198,7 @@ class DayEleven : AoCDay<List<Int>>, AoCObservable<AoCObserverContext> {
             nevermind, it doesn't exist, it's novel apparently
      */
 
-    fun digitToDouble(): Map<BigInteger, Pair<List<BigInteger>, Int>> {
+    fun digitToDouble(): Map<BigInteger, MutableList<Pair<List<BigInteger>, Int>>> {
         return (0..9).associate {
             var stone = it.toBigInteger()
             var blinks = 0
@@ -205,53 +207,122 @@ class DayEleven : AoCDay<List<Int>>, AoCObservable<AoCObserverContext> {
                 stone = blink(listOf(stone)).first()
             }
             val stoneStr = stone.toString()
-            it.toBigInteger() to Pair(
+            it.toBigInteger() to mutableListOf(Pair(
                 stoneStr.toCharArray().map { c -> c.digitToInt().toBigInteger() },
-                blinks + log2(stoneStr.length.toDouble()).toInt()
+                blinks + log2(stoneStr.length.toDouble()).toInt())
             )
         }
     }
 
     fun getShortCut(
         s: BigInteger,
-        digitMap: Map<BigInteger, Pair<List<BigInteger>, Int>>
-    ): Tuple<BigInteger, List<BigInteger>, Int> {
-        var stone = s
-        var blinks = 0
-        do {
-            blinks++
-            stone = blink(listOf(stone)).first()
-        } while (stone.toString().length % 2 != 0)
-        val splitStones = blink(listOf(stone)).toMutableList()
-        if (splitStones.last() == ZERO) {
-            splitStones.removeAt(splitStones.size - 1)
-            splitStones.addAll(getAt(ZERO, digitMap, blinks - 1))
-        }
-        return Tuple(s, splitStones, blinks)
+        digitMap: Map<BigInteger, MutableList<Pair<List<BigInteger>, Int>>>,
+        callStack: List<BigInteger>
+    ): MutableList<Pair<List<BigInteger>, Int>> {
+        if (digitMap[s] != null) return digitMap[s]!!
+        // if not present, blink then add a flattened call on splits
+        val stones = blink(listOf(s))
+        return stones.map { getShortCut(it, digitMap, callStack.toMutableList() + mutableListOf(it)).map { p -> Pair(p.first, p.second+1) } }.flatten().toMutableList()
     }
 
-    fun getAt(s: BigInteger, digitMap: Map<BigInteger, Pair<List<BigInteger>, Int>>, depth: Int): List<BigInteger> {
-        val digit = digitMap[s] ?: return listOf()
-        val depthDiff = depth - digit.second
-        if (depthDiff == 0) return digit.first
-        var i = 0
-        var stones = digit.first
-        if (depthDiff < 0) {
-            while (i > depthDiff) {
-                i--
-                if (stones.size > 1) {
-                    stones =
+//    fun getShortCutRec(s: BigInteger,
+//                       digitMap: Map<BigInteger, MutableList<Pair<List<BigInteger>, Int>>>
+//    ): Tuple<BigInteger, List<BigInteger>, Int> {
+//        if
+//        var stone = s
+//        var blinks = 0
+//    }
+
+    fun getAt(s: BigInteger, digitMap: Map<BigInteger, MutableList<Pair<List<BigInteger>, Int>>>, depth: Int): List<BigInteger> {
+        val digit = digitMap[s] ?: return mutableListOf()
+        return digit.map {
+            val depthDiff = depth - it.second
+            if (depthDiff == 0) return it.first
+            var i = 0
+            var stones = it.first
+            if (depthDiff < 0) {
+                while (i > depthDiff) {
+                    i--
+                    stones = if (stones.size > 1) {
                         (stones.indices step 2).map { x -> BigInteger(stones[x].toString() + stones[x + 1].toString()) }
-                } else {
-                    stones = stones.map { it.divide(2024.toBigInteger()) }
+                    } else {
+                        stones.map { s -> s.divide(2024.toBigInteger()) }
+                    }
+                }
+            } else {
+                while (i < depthDiff) {
+                    i++
+                    stones = blink(stones)
                 }
             }
-        } else {
-            while (i < depthDiff) {
-                i++
-                stones = blink(stones)
+            stones
+        }.flatten()
+
+    }
+
+    fun getAtNew(s: BigInteger, digitMap: Map<BigInteger, MutableList<Pair<List<BigInteger>, Int>>>, depth: Int): List<BigInteger> {
+        var digit = digitMap[s]?.toMutableList() ?: return mutableListOf()
+        // start by overshooting
+        while (digit.any { it.second < depth }) {
+            var digitSize = digit.size
+            (0..<digitSize).forEach {  i ->
+                if (digit[i].second < depth) {
+                    val newDigits = digit[i].first.map { d -> digitMap[d]?.toMutableList() ?: mutableListOf() }.flatten().map { Pair(it.first, it.second+digit[i].second) }
+                    digit.removeAt(i)
+                    digit.addAll(i, newDigits)
+                    digitSize = digit.size
+                }
             }
         }
-        return stones
+        var g = 0
+        while (digit.any { it.second != depth } && g < 100) {
+            g++
+            var digitSize = digit.size
+            (0..<digitSize).forEach {  i ->
+                if (digit[i].first.size % 2 == 0 && digit[i].second > depth) {
+                    val moves = min(log2(digit[i].first.size.toDouble()).toInt(), digit[i].second-depth)
+                    var x = 0
+                    var newDigits = digit[i].first.map { it.toString() }
+                    do {
+                        newDigits = (0..<newDigits.size/2).mapIndexed { j, _ ->
+                            listOf(newDigits[2*j], newDigits[2*j+1]).joinToString("")
+                        }
+                        x++
+                    } while (x < moves)
+                    digit[i] = Pair(newDigits.map { it.toBigInteger() }, digit[i].second-moves)
+                }
+                while (digit[i].first.size == 1 && digit[i].first.first().rem(2024.toBigInteger()) == ZERO && digit[i].second > depth) {
+                    digit[i] = Pair(listOf(digit[i].first.first().div(2024.toBigInteger())), digit[i].second-1)
+                }
+            }
+            // Do concat
+            var x = 0
+            var y = 1
+            digitSize = digit.size
+            while (x < digitSize) {
+                while (y < digitSize && digit[y].first.first().toString().length == digit[x].first.first().toString().length
+                    && digit[y].second == digit[x].second && digit[x].second != depth
+                    && digit.subList(x, y).joinToString("") { it.first.joinToString("") }.toBigInteger().mod(2024.toBigInteger()) != ZERO) {
+                    y++
+                }
+
+                // combine
+                val newDigits = digit.subList(x, y).joinToString("") { it.first.joinToString("") }
+                val curDepth = digit[x].second
+                if (digit[x].second != depth) {
+                    (x..<y).forEach { _ ->
+                        digit.removeAt(x)
+                    }
+                    digit.add(
+                        x,
+                        Pair(listOf(newDigits.toBigInteger()), curDepth - (log2((y-x).toDouble()).toInt()))
+                    )
+                }
+                x = x+1
+                y = x+1
+                digitSize = digit.size
+            }
+        }
+        return digit.map { it.first }.flatten()
     }
 }

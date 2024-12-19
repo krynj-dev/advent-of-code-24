@@ -74,9 +74,9 @@ class DayElevenTest {
     @Test
     fun testNewMethod() {
         val dayEleven = DayEleven()
-        val numCache: MutableMap<BigInteger, Pair<List<BigInteger>, Int>> = dayEleven.digitToDouble().toMutableMap()
-        val stones = listOf(17).map { it.toBigInteger() }
-        val maxDepth = 5
+        val numCache: MutableMap<BigInteger, MutableList<Pair<List<BigInteger>, Int>>> = dayEleven.digitToDouble().toMutableMap()
+        val stones = listOf(125, 17).map { it.toBigInteger() }
+        val maxDepth = 75
         val maxes: MutableList<Pair<List<BigInteger>, Int>> = mutableListOf()
         val x = stones.map {
             val q = LinkedList<Pair<BigInteger, Int>>()
@@ -85,14 +85,17 @@ class DayElevenTest {
                 val s = q.remove()
                 var digits = numCache[s.first]
                 if (digits == null) {
-                    val sc = dayEleven.getShortCut(s.first, numCache)
-                    digits = numCache.getOrPut(sc.first) { Pair(sc.second, sc.third) }
+                    val sc = dayEleven.getShortCut(s.first, numCache, listOf())
+                    digits = numCache.getOrPut(s.first) { sc }
                 }
-                val totalDepth = s.second + digits.second
-                if (totalDepth >= maxDepth) maxes.add(Pair(digits.first, totalDepth))
-                else digits.first.forEach { l -> q.add(Pair(l, totalDepth)) }
+                digits.forEach { d ->
+                    val totalDepth = s.second + d.second
+                    if (totalDepth >= maxDepth) maxes.add(Pair(d.first, totalDepth))
+                    else d.first.forEach { l -> q.add(Pair(l, totalDepth)) }
+                }
             }
         }
-        assertEquals(55312.toBigInteger(), stones.map { dayEleven.getAt(it, numCache, 5).size.toBigInteger() }.reduce(BigInteger::plus))
+
+        assertEquals(55312.toBigInteger(), stones.map { dayEleven.getAtNew(it, numCache, maxDepth).size.toBigInteger() }.reduce(BigInteger::plus))
     }
 }
