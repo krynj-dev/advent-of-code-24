@@ -23,8 +23,22 @@ class DayFifteenTest {
     @Test
     fun testPartTwo() {
         val dayFifteen = DayFifteen()
-        val result = dayFifteen.partTwo(AoCUtil.readResourceFile("example-15-1.txt", ""))
+        val result = dayFifteen.partTwo(AoCUtil.readResourceFile("example-15-2.txt", ""))
+        assertEquals(9021.toBigInteger(), result)
+    }
+
+    @Test
+    fun testPartTwoAlt() {
+        val dayFifteen = DayFifteen()
+        val result = dayFifteen.partTwo(AoCUtil.readResourceFile("example-15-3.txt", ""))
         assertEquals(1206.toBigInteger(), result)
     }
 
+    @Test
+    fun testWiden() {
+        val dayFifteen = DayFifteen()
+        val positions = AoCUtil.readResourceFile("example-15-1.txt", "").first()
+        dayFifteen.printPositions(dayFifteen.parseInput(positions, true), Pair(positions.size, positions.first().length*2))
+
+    }
 }
