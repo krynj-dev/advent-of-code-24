@@ -10,7 +10,7 @@ import au.com.krynj.aoc.util.AoCUtil
 import java.math.BigInteger
 import kotlin.time.measureTime
 
-class DayThree: AoCDay<List<String>>, AoCObservable<AoCObserverContext> {
+class DayThree: AoCDay<List<String>, BigInteger>, AoCObservable<AoCObserverContext> {
 
     private val observers: MutableList<AoCObserver<AoCObserverContext>> = ArrayList()
     override fun getDay(): Int {

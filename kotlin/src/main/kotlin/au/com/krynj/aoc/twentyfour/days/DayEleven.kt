@@ -20,7 +20,7 @@ import kotlin.time.measureTime
 import kotlin.time.times
 
 
-class DayEleven : AoCDay<List<Int>>, AoCObservable<AoCObserverContext> {
+class DayEleven : AoCDay<List<Int>, BigInteger>, AoCObservable<AoCObserverContext> {
 
     private val observers: MutableList<AoCObserver<AoCObserverContext>> = ArrayList()
 

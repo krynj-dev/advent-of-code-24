@@ -14,7 +14,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.time.measureTime
 
-class DayFifteen : AoCDay<List<List<String>>>, AoCObservable<AoCObserverContext> {
+class DayFifteen : AoCDay<List<List<String>>, BigInteger>, AoCObservable<AoCObserverContext> {
 
     private val observers: MutableList<AoCObserver<AoCObserverContext>> = ArrayList()
 

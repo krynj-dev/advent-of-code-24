@@ -19,7 +19,7 @@ import kotlin.math.min
 import kotlin.math.sign
 import kotlin.time.measureTime
 
-class DayFourteen : AoCDay<List<String>>, AoCObservable<AoCObserverContext> {
+class DayFourteen : AoCDay<List<String>, BigInteger>, AoCObservable<AoCObserverContext> {
 
     private val observers: MutableList<AoCObserver<AoCObserverContext>> = ArrayList()
     private var size: Pair<Int, Int> = Pair(103, 101)

@@ -12,7 +12,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.LinkedHashMap
 import kotlin.time.measureTime
 
-class DayOne : AoCDay<List<String>>, AoCObservable<AoCObserverContext> {
+class DayOne : AoCDay<List<String>, BigInteger>, AoCObservable<AoCObserverContext> {
 
     private val observers: MutableList<AoCObserver<AoCObserverContext>> = ArrayList()
 

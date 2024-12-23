@@ -13,7 +13,7 @@ import au.com.krynj.aoc.util.AoCUtil
 import java.math.BigInteger
 import kotlin.time.measureTime
 
-class DaySix: AoCDay<List<String>>, AoCObservable<SimpleObserverContext> {
+class DaySix: AoCDay<List<String>, BigInteger>, AoCObservable<SimpleObserverContext> {
 
     private val observers: MutableList<AoCObserver<SimpleObserverContext>> = ArrayList()
 

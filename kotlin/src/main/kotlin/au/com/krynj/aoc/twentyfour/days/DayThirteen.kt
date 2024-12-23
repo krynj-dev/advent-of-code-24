@@ -18,7 +18,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.time.measureTime
 
-class DayThirteen : AoCDay<List<List<String>>>, AoCObservable<AoCObserverContext> {
+class DayThirteen : AoCDay<List<List<String>>, BigInteger>, AoCObservable<AoCObserverContext> {
 
     private val observers: MutableList<AoCObserver<AoCObserverContext>> = ArrayList()
 

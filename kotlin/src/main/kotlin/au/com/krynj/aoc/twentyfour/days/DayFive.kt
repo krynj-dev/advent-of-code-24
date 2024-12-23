@@ -14,7 +14,7 @@ import au.com.krynj.aoc.util.ds.DirectedGraph
 import java.math.BigInteger
 import kotlin.time.measureTime
 
-class DayFive: AoCDay<List<List<String>>>, AoCObservable<SimpleObserverContext> {
+class DayFive: AoCDay<List<List<String>>, BigInteger>, AoCObservable<SimpleObserverContext> {
 
     private val observers: MutableList<AoCObserver<SimpleObserverContext>> = ArrayList()
 
@@ -73,7 +73,7 @@ class DayFive: AoCDay<List<List<String>>>, AoCObservable<SimpleObserverContext> 
                     if (r.last() !in nodeMap.keys) nodeMap[r.last()] = graph.addNode(r.last())
                     graph.addEdge(nodeMap[r.first()]!!, nodeMap[r.last()]!!)
                 }
-                val sorted = graph.topologicalSort()!!
+                val sorted = graph.topologicalSort { a, b -> a.value.compareTo(b.value) }!!
                 result += sorted[sorted.size / 2].value
             }
         }

@@ -16,7 +16,7 @@ import kotlin.math.abs
 import kotlin.math.sign
 import kotlin.time.measureTime
 
-class DayFour : AoCDay<List<List<Char>>>, AoCObservable<SimpleObserverContext> {
+class DayFour : AoCDay<List<List<Char>>, BigInteger>, AoCObservable<SimpleObserverContext> {
 
     private val observers: MutableList<AoCObserver<SimpleObserverContext>> = ArrayList()
 
